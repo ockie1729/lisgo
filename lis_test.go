@@ -51,5 +51,14 @@ func TestEvalDiv(t *testing.T) {
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
 	}
+}
 
+func TestEvalNestedExp(t *testing.T) {
+	inputExp := []interface{}{"add", 1, []interface{}{"add", 2, []interface{}{"add", 2, 2}}}
+	got := Eval(inputExp)
+	want := 7
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
 }
