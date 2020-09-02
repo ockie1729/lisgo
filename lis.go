@@ -2,15 +2,29 @@ package main
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 )
 
 
 func Eval(expression []interface{}) int {
-	op, _ := expression[0].(string)
-	a, _ := expression[1].(int)
-	b, _ := expression[2].(int)
+	// TODO expressionの型をinterface{}にすれば，[]inteface{}も受け取れるのでは
 
+	op, _ := expression[0].(string)
+
+	var a int
+	if reflect.TypeOf(expression[1]).Kind() == reflect.Int {
+		a, _ = expression[1].(int)
+	} else {
+		a = Eval(expression[1].([]interface{}))
+	}
+
+	var b int
+	if reflect.TypeOf(expression[2]).Kind() == reflect.Int {
+		b, _ = expression[2].(int)
+	} else {
+		b = Eval(expression[2].([]interface{}))
+	}
 	var res int
 
 	if op == "add" {
