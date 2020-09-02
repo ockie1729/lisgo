@@ -14,7 +14,7 @@ func TestTokenize(t *testing.T) {
 }
 
 func TestEvalAdd(t *testing.T) {
-	inputExp := []interface{} {"add", 1, 2}
+	inputExp := []interface{}{"add", 1, 2}
 	got := Eval(inputExp)
 	want := 3
 
@@ -24,7 +24,7 @@ func TestEvalAdd(t *testing.T) {
 }
 
 func TestEvalSub(t *testing.T) {
-	inputExp := []interface{} {"sub", 1, 3}
+	inputExp := []interface{}{"sub", 1, 3}
 	got := Eval(inputExp)
 	want := -2
 
@@ -34,7 +34,7 @@ func TestEvalSub(t *testing.T) {
 }
 
 func TestEvalMul(t *testing.T) {
-	inputExp := []interface{} {"mul", 1, 3}
+	inputExp := []interface{}{"mul", 1, 3}
 	got := Eval(inputExp)
 	want := 3
 
@@ -44,7 +44,7 @@ func TestEvalMul(t *testing.T) {
 }
 
 func TestEvalDiv(t *testing.T) {
-	inputExp := []interface{} {"div", 6, 2}
+	inputExp := []interface{}{"div", 6, 2}
 	got := Eval(inputExp)
 	want := 3
 

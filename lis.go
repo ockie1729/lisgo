@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-
 func Eval(expression []interface{}) int {
 	// TODO expressionの型をinterface{}にすれば，[]inteface{}も受け取れるのでは
 
@@ -40,7 +39,6 @@ func Eval(expression []interface{}) int {
 	return res
 }
 
-
 func Tokenize(s string) []string {
 	s = strings.Replace(s, "(", " ( ", -1)
 	s = strings.Replace(s, ")", " ) ", -1)
@@ -49,7 +47,7 @@ func Tokenize(s string) []string {
 	tokenized := []string{}
 	// 空文字を除去
 	for _, token := range split {
-		if (token != "") {
+		if token != "" {
 			tokenized = append(tokenized, token)
 		}
 	}
