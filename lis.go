@@ -39,19 +39,28 @@ func Eval(expression []interface{}) int {
 	return res
 }
 
-func Tokenize(s string) []string {
+func Tokenize(s string) []Token {
 	s = strings.Replace(s, "(", " ( ", -1)
 	s = strings.Replace(s, ")", " ) ", -1)
 
 	split := strings.Split(s, " ")
-	tokenized := []string{}
+	var tokenized []Token
 	// 空文字を除去
-	for _, token := range split {
-		if token != "" {
+	for _, s := range split {
+		if s != "" {
+			var token Token
+			token.valString = s
 			tokenized = append(tokenized, token)
 		}
 	}
 	return tokenized
+}
+
+type Token struct {
+	valInt    int
+	valFloat  float64
+	valString string
+	valFunc   func(Token, Token) Token
 }
 
 func main() {

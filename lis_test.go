@@ -8,8 +8,10 @@ func TestTokenize(t *testing.T) {
 	got := Tokenize("(+ 1 2)")
 	want := []string{"(", "+", "1", "2", ")"}
 
-	if diff := cmp.Diff(want, got); diff != "" {
-		t.Errorf("got %q want %q", got, want)
+	for i := 0; i < len(want); i++ {
+		if got[i].valString != want[i] {
+			t.Errorf("got %q want %q", got[i].valString, want[i])
+		}
 	}
 }
 
