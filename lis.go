@@ -6,6 +6,13 @@ import (
 	"strings"
 )
 
+type Token struct {
+	valInt    int
+	valFloat  float64
+	valString string
+	valFunc   func(Token, Token) Token
+}
+
 func Eval(expression []interface{}) int {
 	// TODO expressionの型をinterface{}にすれば，[]inteface{}も受け取れるのでは
 
@@ -54,13 +61,6 @@ func Tokenize(s string) []Token {
 		}
 	}
 	return tokenized
-}
-
-type Token struct {
-	valInt    int
-	valFloat  float64
-	valString string
-	valFunc   func(Token, Token) Token
 }
 
 func main() {
