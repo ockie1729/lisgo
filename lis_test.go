@@ -86,7 +86,7 @@ func TestAtomString(t *testing.T) {
 }
 
 func TestEvalAdd(t *testing.T) {
-	inputExp := []interface{}{"add", 1, 2}
+	inputExp := ReadFrom(Tokenize("(+ 1 2)"))
 	got := Eval(inputExp)
 	want := 3
 
@@ -95,42 +95,53 @@ func TestEvalAdd(t *testing.T) {
 	}
 }
 
-func TestEvalSub(t *testing.T) {
-	inputExp := []interface{}{"sub", 1, 3}
+func TestEvalAdd2(t *testing.T) {
+	inputExp := ReadFrom(Tokenize("(+ 2 3)"))
 	got := Eval(inputExp)
-	want := -2
+	want := 5
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
 	}
 }
 
-func TestEvalMul(t *testing.T) {
-	inputExp := []interface{}{"mul", 1, 3}
-	got := Eval(inputExp)
-	want := 3
 
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
-}
+// func TestEvalSub(t *testing.T) {
+// 	inputExp := []interface{}{"sub", 1, 3}
+// 	got := Eval(inputExp)
+// 	want := -2
 
-func TestEvalDiv(t *testing.T) {
-	inputExp := []interface{}{"div", 6, 2}
-	got := Eval(inputExp)
-	want := 3
+// 	if got != want {
+// 		t.Errorf("got %q want %q", got, want)
+// 	}
+// }
 
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
-}
+// func TestEvalMul(t *testing.T) {
+// 	inputExp := []interface{}{"mul", 1, 3}
+// 	got := Eval(inputExp)
+// 	want := 3
 
-func TestEvalNestedExp(t *testing.T) {
-	inputExp := []interface{}{"add", 1, []interface{}{"add", 2, []interface{}{"add", 2, 2}}}
-	got := Eval(inputExp)
-	want := 7
+// 	if got != want {
+// 		t.Errorf("got %q want %q", got, want)
+// 	}
+// }
 
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
-}
+// func TestEvalDiv(t *testing.T) {
+// 	inputExp := []interface{}{"div", 6, 2}
+// 	got := Eval(inputExp)
+// 	want := 3
+
+// 	if got != want {
+// 		t.Errorf("got %q want %q", got, want)
+// 	}
+// }
+
+// func TestEvalNestedExp(t *testing.T) {
+// 	inputExp := []interface{}{"add", 1, []interface{}{"add", 2, []interface{}{"add", 2, 2}}}
+// 	got := Eval(inputExp)
+// 	want := 7
+
+// 	if got != want {
+// 		t.Errorf("got %q want %q", got, want)
+// 	}
+// }

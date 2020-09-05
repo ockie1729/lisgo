@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 	"strings"
 )
@@ -16,37 +15,26 @@ type Token struct {
 	idxCurrentToken int
 }
 
-func Eval(expression []interface{}) int {
-	// TODO expressionの型をinterface{}にすれば，[]inteface{}も受け取れるのでは
+func Eval(expression Token) int {
+	op := expression.childTokens[0].valString
+    a := expression.childTokens[1].valInt
+    b := expression.childTokens[2].valInt
 
-	op, _ := expression[0].(string)
+    var res int
 
-	var a int
-	if reflect.TypeOf(expression[1]).Kind() == reflect.Int {
-		a, _ = expression[1].(int)
-	} else {
-		a = Eval(expression[1].([]interface{}))
-	}
-
-	var b int
-	if reflect.TypeOf(expression[2]).Kind() == reflect.Int {
-		b, _ = expression[2].(int)
-	} else {
-		b = Eval(expression[2].([]interface{}))
-	}
-	var res int
-
-	if op == "add" {
+	if op == "+" {
 		res = a + b
-	} else if op == "sub" {
+	} else if op == "-" {
 		res = a - b
-	} else if op == "mul" {
+	} else if op == "*" {
 		res = a * b
-	} else if op == "div" {
+	} else if op == "/" {
 		res = a / b
-	}
+	} else {
+        panic("unknown op")
+    }
 
-	return res
+    return res
 }
 
 func Tokenize(s string) []string {
