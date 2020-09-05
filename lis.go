@@ -26,6 +26,8 @@ type Token struct {
 	idxCurrentToken int
 }
 
+var GlobalEnv map[string]Token
+
 func Eval(expression Token) int {
     if expression.tokenType == TOKEN_STRING {
         return GlobalEnv[expression.valString].valInt
@@ -35,8 +37,14 @@ func Eval(expression Token) int {
 
     op := expression.childTokens[0].valString
 
-    var res int
+    if op == "define" {
+        var_name := expression.childTokens[1].valString
+        exp := expression.childTokens[2]
+        GlobalEnv[var_name] = exp
 
+        // return expression.childTokens[1] // FIXME
+        return -1
+    }
 
     a := Eval(expression.childTokens[1])
     b := Eval(expression.childTokens[2])
@@ -130,5 +138,7 @@ func Atom(tokenStr string) Token {
 }
 
 func main() {
-	fmt.Println("hello world!")
+    GlobalEnv = map[string]Token{}
+
+    fmt.Println("hello world!")
 }

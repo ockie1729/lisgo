@@ -135,3 +135,22 @@ func TestEvalNestedExp(t *testing.T) {
 		t.Errorf("got %q want %q", got, want)
 	}
 }
+
+func TestDefine(t *testing.T) {
+    GlobalEnv = map[string]Token{}
+
+    inputExp := ReadFrom(Tokenize("(define a 2)"))
+    Eval(inputExp)
+}
+
+func TestVariable(t *testing.T) {
+    GlobalEnv = map[string]Token{}
+
+    Eval(ReadFrom(Tokenize("(define a 2)")))
+    got := Eval(ReadFrom(Tokenize("(+ a 2)")))
+    want := 4
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
