@@ -6,22 +6,42 @@ import (
 	"strings"
 )
 
+const (
+	TOKEN_INT = iota
+	TOKEN_FLOAT
+	TOKEN_STRING
+	TOKEN_FUNC
+	TOKEN_CHILD_TOKENS
+)
+
 type Token struct {
-	valInt          int
-	valFloat        float64
-	valString       string
-	valFunc         func(Token, Token) Token
+	tokenType int
+
+	valInt    int
+	valFloat  float64
+	valString string
+	valFunc   func(Token, Token) Token
+
 	childTokens     []Token
 	idxCurrentToken int
 }
 
 func Eval(expression Token) int {
-	op := expression.childTokens[0].valString
-    a := expression.childTokens[1].valInt
-    b := expression.childTokens[2].valInt
+    if expression.tokenType == TOKEN_STRING {
+        return GlobalEnv[expression.valString].valInt
+    } else if expression.tokenType != TOKEN_CHILD_TOKENS {
+        return expression.valInt
+    }
+
+    op := expression.childTokens[0].valString
 
     var res int
 
+
+    a := Eval(expression.childTokens[1])
+    b := Eval(expression.childTokens[2])
+
+	var res int
 	if op == "+" {
 		res = a + b
 	} else if op == "-" {
@@ -76,6 +96,7 @@ func readFromRec(inputTokens []string) Token {
 
 			newToken.childTokens = append(newToken.childTokens, readFromRec(inputTokens))
 		}
+        newToken.tokenType = TOKEN_CHILD_TOKENS
 		idxCurrentToken += 1 // pop off ")"
 		return newToken
 	} else if tokenStr == ")" {
@@ -90,6 +111,7 @@ func Atom(tokenStr string) Token {
 	if err == nil {
 		var res Token
 		res.valInt = a
+        res.tokenType = TOKEN_INT
 		return res
 	}
 
@@ -97,11 +119,13 @@ func Atom(tokenStr string) Token {
 	if err == nil {
 		var res Token
 		res.valFloat = f
+        res.tokenType = TOKEN_FLOAT
 		return res
 	}
 
 	var res Token
 	res.valString = tokenStr
+    res.tokenType = TOKEN_STRING
 	return res
 }
 

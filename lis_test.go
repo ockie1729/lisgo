@@ -95,53 +95,43 @@ func TestEvalAdd(t *testing.T) {
 	}
 }
 
-func TestEvalAdd2(t *testing.T) {
-	inputExp := ReadFrom(Tokenize("(+ 2 3)"))
+func TestEvalSub(t *testing.T) {
+	inputExp := ReadFrom(Tokenize("(- 1 2)"))
 	got := Eval(inputExp)
-	want := 5
+	want := -1
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
 	}
 }
 
+func TestEvalMul(t *testing.T) {
+	inputExp := ReadFrom(Tokenize("(* 2 3)"))
+	got := Eval(inputExp)
+	want := 6
 
-// func TestEvalSub(t *testing.T) {
-// 	inputExp := []interface{}{"sub", 1, 3}
-// 	got := Eval(inputExp)
-// 	want := -2
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
 
-// 	if got != want {
-// 		t.Errorf("got %q want %q", got, want)
-// 	}
-// }
+func TestEvalDiv(t *testing.T) {
+	inputExp := ReadFrom(Tokenize("(/ 4 2)"))
+	got := Eval(inputExp)
+	want := 2
 
-// func TestEvalMul(t *testing.T) {
-// 	inputExp := []interface{}{"mul", 1, 3}
-// 	got := Eval(inputExp)
-// 	want := 3
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
 
-// 	if got != want {
-// 		t.Errorf("got %q want %q", got, want)
-// 	}
-// }
+func TestEvalNestedExp(t *testing.T) {
+    tokenized := Tokenize("(* (+ 4 (+ 1 1)) (/ 6 (* 1 3)))")
+	inputExp := ReadFrom(tokenized)
+	got := Eval(inputExp)
+	want := 12
 
-// func TestEvalDiv(t *testing.T) {
-// 	inputExp := []interface{}{"div", 6, 2}
-// 	got := Eval(inputExp)
-// 	want := 3
-
-// 	if got != want {
-// 		t.Errorf("got %q want %q", got, want)
-// 	}
-// }
-
-// func TestEvalNestedExp(t *testing.T) {
-// 	inputExp := []interface{}{"add", 1, []interface{}{"add", 2, []interface{}{"add", 2, 2}}}
-// 	got := Eval(inputExp)
-// 	want := 7
-
-// 	if got != want {
-// 		t.Errorf("got %q want %q", got, want)
-// 	}
-// }
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
