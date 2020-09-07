@@ -6,7 +6,7 @@ import (
 
 func TestMain(m *testing.M) {
     GlobalEnv = Env{}
-    GlobalEnv.Init([]string{}, []Token{}, nil)
+    GlobalEnv.Init([]Token{}, []Token{}, nil)
     AddGlobals()
 
     m.Run()
@@ -154,6 +154,24 @@ func TestVariable(t *testing.T) {
     Eval(ReadFrom(Tokenize("(define b 3)")))
 	got := Eval(ReadFrom(Tokenize("(+ a b)"))).valInt
 	want := 5
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
+
+func TestLambdaExpression(t *testing.T) {
+    got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 2)) 2)"))).valInt
+    want := 4
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
+
+func TestLambdaExpression2(t *testing.T) {
+    got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 3)) 2)"))).valInt
+    want := 6
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)

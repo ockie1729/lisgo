@@ -31,11 +31,11 @@ type Env struct {
     outer *Env
 }
 
-func (env *Env) Init(parms []string, args []Token, outer *Env) {
+func (env *Env) Init(parms []Token, args []Token, outer *Env) {
     env.inner = map[string]Token{}
 
     for i := 0; i < len(parms); i++ {
-        env.inner[parms[i]] = args[i]
+        env.inner[parms[i].valString] = args[i]
         env.outer = outer
     }
 }
@@ -54,24 +54,33 @@ func Eval(expression Token) Token{
     return evalRec(expression, &GlobalEnv)
 }
 
-func evalRec(expression Token, env *Env) Token {
-	if expression.tokenType == TOKEN_STRING {
-		return GlobalEnv.Find(expression.valString).inner[expression.valString]
-	} else if expression.tokenType != TOKEN_CHILD_TOKENS {
-		return expression
-	} else if expression.childTokens[0].valString == "define" {
-		var_name := expression.childTokens[1].valString
-		exp := expression.childTokens[2]
+func evalRec(x Token, env *Env) Token {
+	if x.tokenType == TOKEN_STRING {
+		return env.Find(x.valString).inner[x.valString]
+	} else if x.tokenType != TOKEN_CHILD_TOKENS {
+		return x
+	} else if x.childTokens[0].valString == "define" {
+		var_name := x.childTokens[1].valString
+		exp := x.childTokens[2]
 		env.inner[var_name] = exp
 
-		// return expression.childTokens[1] // FIXME
-		return Token{}
+		return Token{}  // FIXME
+	} else if x.childTokens[0].valString == "lambda" {
+        vars := x.childTokens[1]
+        exp := x.childTokens[2]
+
+        res := Token{}
+        res.valFunc = func(token Token) Token {
+            newEnv := &Env{}
+            newEnv.Init(vars.childTokens, token.childTokens, env)
+            return evalRec(exp, newEnv)}
+        return res
     } else {
-        operatorToken := evalRec(expression.childTokens[0], env)
+        operatorToken := evalRec(x.childTokens[0], env)
 
         operands := []Token{}
-        for i := 1; i < len(expression.childTokens); i++ {
-            operands = append(operands, evalRec(expression.childTokens[i], env))
+        for i := 1; i < len(x.childTokens); i++ {
+            operands = append(operands, evalRec(x.childTokens[i], env))
         }
         operandsToken := Token{}
         operandsToken.childTokens = operands
@@ -155,7 +164,7 @@ func Atom(tokenStr string) Token {
 
 func main() {
 	GlobalEnv = Env{}
-    GlobalEnv.Init([]string{}, []Token{}, nil)
+    GlobalEnv.Init([]Token{}, []Token{}, nil)
 
 	fmt.Println("hello world!")
 }
