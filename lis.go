@@ -50,7 +50,11 @@ func (env *Env) Find(var_name string) *Env {
 
 var GlobalEnv Env
 
-func Eval(expression Token) Token {
+func Eval(expression Token) Token{
+    return evalRec(expression, &GlobalEnv)
+}
+
+func evalRec(expression Token, env *Env) Token {
 	if expression.tokenType == TOKEN_STRING {
 		return GlobalEnv.Find(expression.valString).inner[expression.valString]
 	} else if expression.tokenType != TOKEN_CHILD_TOKENS {
@@ -58,16 +62,16 @@ func Eval(expression Token) Token {
 	} else if expression.childTokens[0].valString == "define" {
 		var_name := expression.childTokens[1].valString
 		exp := expression.childTokens[2]
-		GlobalEnv.inner[var_name] = exp
+		env.inner[var_name] = exp
 
 		// return expression.childTokens[1] // FIXME
 		return Token{}
-	} else {
-        operatorToken := Eval(expression.childTokens[0])
+    } else {
+        operatorToken := evalRec(expression.childTokens[0], env)
 
         operands := []Token{}
         for i := 1; i < len(expression.childTokens); i++ {
-            operands = append(operands, Eval(expression.childTokens[i]))
+            operands = append(operands, evalRec(expression.childTokens[i], env))
         }
         operandsToken := Token{}
         operandsToken.childTokens = operands
