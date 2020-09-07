@@ -20,49 +20,61 @@ type Token struct {
 	valInt    int
 	valFloat  float64
 	valString string
-	valFunc   func(Token, Token) Token
+	valFunc   func(Token) Token
 
 	childTokens     []Token
 	idxCurrentToken int
 }
 
-var GlobalEnv map[string]Token
+type Env struct {
+    inner map[string]Token
+    outer *Env
+}
 
-func Eval(expression Token) int {
-    if expression.tokenType == TOKEN_STRING {
-        return GlobalEnv[expression.valString].valInt
-    } else if expression.tokenType != TOKEN_CHILD_TOKENS {
-        return expression.valInt
+func (env *Env) Init(parms []string, args []Token, outer *Env) {
+    env.inner = map[string]Token{}
+
+    for i := 0; i < len(parms); i++ {
+        env.inner[parms[i]] = args[i]
+        env.outer = outer
     }
+}
 
-    op := expression.childTokens[0].valString
-
-    if op == "define" {
-        var_name := expression.childTokens[1].valString
-        exp := expression.childTokens[2]
-        GlobalEnv[var_name] = exp
-
-        // return expression.childTokens[1] // FIXME
-        return -1
+func (env *Env) Find(var_name string) *Env {
+    if _, ok := env.inner[var_name]; ok {
+        return env
+    } else {
+        return env.outer.Find(var_name)
     }
+}
 
-    a := Eval(expression.childTokens[1])
-    b := Eval(expression.childTokens[2])
+var GlobalEnv Env
 
-	var res int
-	if op == "+" {
-		res = a + b
-	} else if op == "-" {
-		res = a - b
-	} else if op == "*" {
-		res = a * b
-	} else if op == "/" {
-		res = a / b
+func Eval(expression Token) Token {
+	if expression.tokenType == TOKEN_STRING {
+		return GlobalEnv.Find(expression.valString).inner[expression.valString]
+	} else if expression.tokenType != TOKEN_CHILD_TOKENS {
+		return expression
+	} else if expression.childTokens[0].valString == "define" {
+		var_name := expression.childTokens[1].valString
+		exp := expression.childTokens[2]
+		GlobalEnv.inner[var_name] = exp
+
+		// return expression.childTokens[1] // FIXME
+		return Token{}
 	} else {
-        panic("unknown op")
-    }
+        operatorToken := Eval(expression.childTokens[0])
 
-    return res
+        operands := []Token{}
+        for i := 1; i < len(expression.childTokens); i++ {
+            operands = append(operands, Eval(expression.childTokens[i]))
+        }
+        operandsToken := Token{}
+        operandsToken.childTokens = operands
+        operandsToken.tokenType = TOKEN_CHILD_TOKENS
+
+        return operatorToken.valFunc(operandsToken)
+    }
 }
 
 func Tokenize(s string) []string {
@@ -104,7 +116,7 @@ func readFromRec(inputTokens []string) Token {
 
 			newToken.childTokens = append(newToken.childTokens, readFromRec(inputTokens))
 		}
-        newToken.tokenType = TOKEN_CHILD_TOKENS
+		newToken.tokenType = TOKEN_CHILD_TOKENS
 		idxCurrentToken += 1 // pop off ")"
 		return newToken
 	} else if tokenStr == ")" {
@@ -119,7 +131,7 @@ func Atom(tokenStr string) Token {
 	if err == nil {
 		var res Token
 		res.valInt = a
-        res.tokenType = TOKEN_INT
+		res.tokenType = TOKEN_INT
 		return res
 	}
 
@@ -127,18 +139,19 @@ func Atom(tokenStr string) Token {
 	if err == nil {
 		var res Token
 		res.valFloat = f
-        res.tokenType = TOKEN_FLOAT
+		res.tokenType = TOKEN_FLOAT
 		return res
 	}
 
 	var res Token
 	res.valString = tokenStr
-    res.tokenType = TOKEN_STRING
+	res.tokenType = TOKEN_STRING
 	return res
 }
 
 func main() {
-    GlobalEnv = map[string]Token{}
+	GlobalEnv = Env{}
+    GlobalEnv.Init([]string{}, []Token{}, nil)
 
-    fmt.Println("hello world!")
+	fmt.Println("hello world!")
 }

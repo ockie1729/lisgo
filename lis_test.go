@@ -4,6 +4,14 @@ import (
 	"testing"
 )
 
+func TestMain(m *testing.M) {
+    GlobalEnv = Env{}
+    GlobalEnv.Init([]string{}, []Token{}, nil)
+    AddGlobals()
+
+    m.Run()
+}
+
 func TestTokenize(t *testing.T) {
 	got := Tokenize("(+ 1 2)")
 	want := []string{"(", "+", "1", "2", ")"}
@@ -87,7 +95,7 @@ func TestAtomString(t *testing.T) {
 
 func TestEvalAdd(t *testing.T) {
 	inputExp := ReadFrom(Tokenize("(+ 1 2)"))
-	got := Eval(inputExp)
+	got := Eval(inputExp).valInt
 	want := 3
 
 	if got != want {
@@ -97,7 +105,7 @@ func TestEvalAdd(t *testing.T) {
 
 func TestEvalSub(t *testing.T) {
 	inputExp := ReadFrom(Tokenize("(- 1 2)"))
-	got := Eval(inputExp)
+	got := Eval(inputExp).valInt
 	want := -1
 
 	if got != want {
@@ -107,7 +115,7 @@ func TestEvalSub(t *testing.T) {
 
 func TestEvalMul(t *testing.T) {
 	inputExp := ReadFrom(Tokenize("(* 2 3)"))
-	got := Eval(inputExp)
+	got := Eval(inputExp).valInt
 	want := 6
 
 	if got != want {
@@ -117,7 +125,7 @@ func TestEvalMul(t *testing.T) {
 
 func TestEvalDiv(t *testing.T) {
 	inputExp := ReadFrom(Tokenize("(/ 4 2)"))
-	got := Eval(inputExp)
+	got := Eval(inputExp).valInt
 	want := 2
 
 	if got != want {
@@ -126,9 +134,9 @@ func TestEvalDiv(t *testing.T) {
 }
 
 func TestEvalNestedExp(t *testing.T) {
-    tokenized := Tokenize("(* (+ 4 (+ 1 1)) (/ 6 (* 1 3)))")
+	tokenized := Tokenize("(* (+ 4 (+ 1 1)) (/ 6 (* 1 3)))")
 	inputExp := ReadFrom(tokenized)
-	got := Eval(inputExp)
+	got := Eval(inputExp).valInt
 	want := 12
 
 	if got != want {
@@ -137,18 +145,15 @@ func TestEvalNestedExp(t *testing.T) {
 }
 
 func TestDefine(t *testing.T) {
-    GlobalEnv = map[string]Token{}
-
-    inputExp := ReadFrom(Tokenize("(define a 2)"))
-    Eval(inputExp)
+	inputExp := ReadFrom(Tokenize("(define a 2)"))
+	Eval(inputExp)
 }
 
 func TestVariable(t *testing.T) {
-    GlobalEnv = map[string]Token{}
-
-    Eval(ReadFrom(Tokenize("(define a 2)")))
-    got := Eval(ReadFrom(Tokenize("(+ a 2)")))
-    want := 4
+	Eval(ReadFrom(Tokenize("(define a 2)")))
+    Eval(ReadFrom(Tokenize("(define b 3)")))
+	got := Eval(ReadFrom(Tokenize("(+ a b)"))).valInt
+	want := 5
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
