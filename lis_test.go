@@ -5,11 +5,11 @@ import (
 )
 
 func TestMain(m *testing.M) {
-    GlobalEnv = Env{}
-    GlobalEnv.Init([]Token{}, []Token{}, nil)
-    (&GlobalEnv).AddOperators()
+	GlobalEnv = Env{}
+	GlobalEnv.Init([]Token{}, []Token{}, nil)
+	(&GlobalEnv).AddOperators()
 
-    m.Run()
+	m.Run()
 }
 
 func TestTokenize(t *testing.T) {
@@ -134,9 +134,9 @@ func TestEvalDiv(t *testing.T) {
 }
 
 func TestEvalGreater(t *testing.T) {
-    inputExp := ReadFrom(Tokenize("(> 4 2)"))
-    got := Eval(inputExp).valBool
-    want := true
+	inputExp := ReadFrom(Tokenize("(> 4 2)"))
+	got := Eval(inputExp).valBool
+	want := true
 
 	if got != want {
 		t.Errorf("got %v want %v", got, want)
@@ -161,7 +161,7 @@ func TestDefine(t *testing.T) {
 
 func TestVariable(t *testing.T) {
 	Eval(ReadFrom(Tokenize("(define a 2)")))
-    Eval(ReadFrom(Tokenize("(define b 3)")))
+	Eval(ReadFrom(Tokenize("(define b 3)")))
 	got := Eval(ReadFrom(Tokenize("(+ a b)"))).valInt
 	want := 5
 
@@ -171,8 +171,8 @@ func TestVariable(t *testing.T) {
 }
 
 func TestLambdaExpression(t *testing.T) {
-    got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 2)) 2)"))).valInt
-    want := 4
+	got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 2)) 2)"))).valInt
+	want := 4
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)
@@ -180,8 +180,8 @@ func TestLambdaExpression(t *testing.T) {
 }
 
 func TestLambdaExpression2(t *testing.T) {
-    got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 3)) 2)"))).valInt
-    want := 6
+	got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 3)) 2)"))).valInt
+	want := 6
 
 	if got != want {
 		t.Errorf("got %q want %q", got, want)

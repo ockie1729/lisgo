@@ -1,8 +1,8 @@
 package main
 
 import (
-    "strings"
-    "strconv"
+	"strconv"
+	"strings"
 )
 
 func Tokenize(s string) []string {

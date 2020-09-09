@@ -1,7 +1,7 @@
 package main
 
-func Eval(expression Token) Token{
-    return evalRec(expression, &GlobalEnv)
+func Eval(expression Token) Token {
+	return evalRec(expression, &GlobalEnv)
 }
 
 func evalRec(x Token, env *Env) Token {
@@ -14,28 +14,29 @@ func evalRec(x Token, env *Env) Token {
 		exp := x.childTokens[2]
 		env.inner[var_name] = exp
 
-		return Token{}  // FIXME
+		return Token{} // FIXME
 	} else if x.childTokens[0].valString == "lambda" {
-        vars := x.childTokens[1]
-        exp := x.childTokens[2]
+		vars := x.childTokens[1]
+		exp := x.childTokens[2]
 
-        res := Token{}
-        res.valFunc = func(token Token) Token {
-            newEnv := &Env{}
-            newEnv.Init(vars.childTokens, token.childTokens, env)
-            return evalRec(exp, newEnv)}
-        return res
-    } else {
-        operatorToken := evalRec(x.childTokens[0], env)
+		res := Token{}
+		res.valFunc = func(token Token) Token {
+			newEnv := &Env{}
+			newEnv.Init(vars.childTokens, token.childTokens, env)
+			return evalRec(exp, newEnv)
+		}
+		return res
+	} else {
+		operatorToken := evalRec(x.childTokens[0], env)
 
-        operands := []Token{}
-        for i := 1; i < len(x.childTokens); i++ {
-            operands = append(operands, evalRec(x.childTokens[i], env))
-        }
-        operandsToken := Token{}
-        operandsToken.childTokens = operands
-        operandsToken.tokenType = TOKEN_CHILD_TOKENS
+		operands := []Token{}
+		for i := 1; i < len(x.childTokens); i++ {
+			operands = append(operands, evalRec(x.childTokens[i], env))
+		}
+		operandsToken := Token{}
+		operandsToken.childTokens = operands
+		operandsToken.tokenType = TOKEN_CHILD_TOKENS
 
-        return operatorToken.valFunc(operandsToken)
-    }
+		return operatorToken.valFunc(operandsToken)
+	}
 }

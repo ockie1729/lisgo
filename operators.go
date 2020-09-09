@@ -3,9 +3,9 @@ package main
 func (env *Env) AddOperators() {
 	env.inner["+"] = Token{valFunc: Add, tokenType: TOKEN_FUNC}
 	env.inner["-"] = Token{valFunc: Sub, tokenType: TOKEN_FUNC}
-    env.inner["*"] = Token{valFunc: Mul, tokenType: TOKEN_FUNC}
-    env.inner["/"] = Token{valFunc: Div, tokenType: TOKEN_FUNC}
-    env.inner[">"] = Token{valFunc: Greater, tokenType: TOKEN_FUNC}
+	env.inner["*"] = Token{valFunc: Mul, tokenType: TOKEN_FUNC}
+	env.inner["/"] = Token{valFunc: Div, tokenType: TOKEN_FUNC}
+	env.inner[">"] = Token{valFunc: Greater, tokenType: TOKEN_FUNC}
 }
 
 func Add(operandsToken Token) Token {
