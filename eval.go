@@ -15,6 +15,16 @@ func evalRec(x Token, env *Env) Token {
 		env.inner[var_name] = exp
 
 		return Token{} // FIXME
+	} else if x.childTokens[0].valString == "if" {
+		test := x.childTokens[1]
+		conseq := x.childTokens[2]
+		alt := x.childTokens[3]
+
+		if evalRec(test, env).valBool {
+			return evalRec(conseq, env)
+		} else {
+			return evalRec(alt, env)
+		}
 	} else if x.childTokens[0].valString == "lambda" {
 		vars := x.childTokens[1]
 		exp := x.childTokens[2]

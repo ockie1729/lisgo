@@ -178,3 +178,21 @@ func TestLambdaExpression(t *testing.T) {
 		t.Errorf("got %q want %q", got, want)
 	}
 }
+
+func TestIfStatement(t *testing.T) {
+	got := Eval(ReadFrom(Tokenize("(if (> 4 3) (+ 2 3) (- 3 1))"))).valInt
+	want := 5
+
+	if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestIfStatement2(t *testing.T) {
+	got := Eval(ReadFrom(Tokenize("(if (> 3 4) (+ 2 3) (- 3 1))"))).valInt
+	want := 2
+
+	if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
