@@ -133,6 +133,16 @@ func TestEvalDiv(t *testing.T) {
 	}
 }
 
+func TestEvalGreater(t *testing.T) {
+    inputExp := ReadFrom(Tokenize("(> 4 2)"))
+    got := Eval(inputExp).valBool
+    want := true
+
+	if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
 func TestEvalNestedExp(t *testing.T) {
 	tokenized := Tokenize("(* (+ 4 (+ 1 1)) (/ 6 (* 1 3)))")
 	inputExp := ReadFrom(tokenized)

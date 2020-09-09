@@ -5,6 +5,7 @@ import "strconv"
 const (
 	TOKEN_INT = iota
 	TOKEN_FLOAT
+    TOKEN_BOOL
 	TOKEN_STRING
 	TOKEN_FUNC
 	TOKEN_CHILD_TOKENS
@@ -15,6 +16,7 @@ type Token struct {
 
 	valInt    int
 	valFloat  float64
+    valBool   bool
 	valString string
 	valFunc   func(Token) Token
 
