@@ -7,7 +7,7 @@ import (
 func TestMain(m *testing.M) {
     GlobalEnv = Env{}
     GlobalEnv.Init([]Token{}, []Token{}, nil)
-    AddGlobals()
+    (&GlobalEnv).AddOperators()
 
     m.Run()
 }

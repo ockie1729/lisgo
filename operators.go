@@ -1,10 +1,11 @@
 package main
 
-func AddGlobals() {
-	GlobalEnv.inner["+"] = Token{valFunc: Add, tokenType: TOKEN_FUNC}
-	GlobalEnv.inner["-"] = Token{valFunc: Sub, tokenType: TOKEN_FUNC}
-    GlobalEnv.inner["*"] = Token{valFunc: Mul, tokenType: TOKEN_FUNC}
-    GlobalEnv.inner["/"] = Token{valFunc: Div, tokenType: TOKEN_FUNC}
+func (env *Env) AddOperators() {
+	env.inner["+"] = Token{valFunc: Add, tokenType: TOKEN_FUNC}
+	env.inner["-"] = Token{valFunc: Sub, tokenType: TOKEN_FUNC}
+    env.inner["*"] = Token{valFunc: Mul, tokenType: TOKEN_FUNC}
+    env.inner["/"] = Token{valFunc: Div, tokenType: TOKEN_FUNC}
+    env.inner[">"] = Token{valFunc: Greator, tokenType: TOKEN_FUNC}
 }
 
 func Add(operandsToken Token) Token {

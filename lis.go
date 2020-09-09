@@ -26,7 +26,7 @@ func Repl() {
 func main() {
 	GlobalEnv = Env{}
     GlobalEnv.Init([]Token{}, []Token{}, nil)
-    AddGlobals()
+    (&GlobalEnv).AddOperators()
   
     Repl()
 }
