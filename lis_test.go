@@ -178,12 +178,3 @@ func TestLambdaExpression(t *testing.T) {
 		t.Errorf("got %q want %q", got, want)
 	}
 }
-
-func TestLambdaExpression2(t *testing.T) {
-	got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 3)) 2)"))).valInt
-	want := 6
-
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
-}
