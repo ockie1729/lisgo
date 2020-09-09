@@ -1,5 +1,7 @@
 package main
 
+import "strconv"
+
 const (
 	TOKEN_INT = iota
 	TOKEN_FLOAT
@@ -18,4 +20,8 @@ type Token struct {
 
 	childTokens     []Token
 	idxCurrentToken int
+}
+
+func (t Token) String() string {
+    return strconv.Itoa(t.valInt)
 }
