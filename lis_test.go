@@ -154,9 +154,24 @@ func TestEvalNestedExp(t *testing.T) {
 	}
 }
 
-func TestDefine(t *testing.T) {
-	inputExp := ReadFrom(Tokenize("(define a 2)"))
-	Eval(inputExp)
+func TestDefineVar(t *testing.T) {
+	Eval(ReadFrom(Tokenize("(define a 2)")))
+	got := Eval(ReadFrom(Tokenize("(* a 2)"))).valInt
+	want := 4
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
+
+func TestDefineFunc(t *testing.T) {
+	Eval(ReadFrom(Tokenize("(define double (lambda (x) (* x 2)))")))
+	got := Eval(ReadFrom(Tokenize("(double 4)"))).valInt
+	want := 8
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
 }
 
 func TestVariable(t *testing.T) {

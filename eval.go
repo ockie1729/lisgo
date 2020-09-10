@@ -12,7 +12,7 @@ func evalRec(x Token, env *Env) Token {
 	} else if x.childTokens[0].valString == "define" {
 		var_name := x.childTokens[1].valString
 		exp := x.childTokens[2]
-		env.inner[var_name] = exp
+		env.inner[var_name] = evalRec(exp, env)
 
 		return Token{} // FIXME
 	} else if x.childTokens[0].valString == "if" {
