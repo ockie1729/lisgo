@@ -6,6 +6,7 @@ func (env *Env) AddOperators() {
 	env.inner["*"] = Token{valFunc: Mul, tokenType: TOKEN_FUNC}
 	env.inner["/"] = Token{valFunc: Div, tokenType: TOKEN_FUNC}
 	env.inner[">"] = Token{valFunc: Greater, tokenType: TOKEN_FUNC}
+	env.inner["="] = Token{valFunc: Equal, tokenType: TOKEN_FUNC}
 }
 
 func Add(operandsToken Token) Token {
@@ -56,4 +57,12 @@ func Greater(operandsToken Token) Token {
 	ans.valBool = a > b
 	ans.tokenType = TOKEN_BOOL
 	return ans
+}
+
+func Equal(operandsToken Token) Token {
+	// TODO 数値以外も比較できるようにする
+	a := operandsToken.childTokens[0].valInt
+	b := operandsToken.childTokens[1].valInt
+
+	return Token{valBool: a == b, tokenType: TOKEN_BOOL}
 }
