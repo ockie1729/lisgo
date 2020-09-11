@@ -6,7 +6,8 @@ func Eval(expression Token) Token {
 
 func evalRec(x Token, env *Env) Token {
 	if x.tokenType == TOKEN_STRING {
-		return env.Find(x.valString).inner[x.valString]
+		found_env, _ := env.Find(x.valString) // FIXME 現状errorを握りつぶしている
+		return found_env.inner[x.valString]
 	} else if x.tokenType != TOKEN_CHILD_TOKENS {
 		return x
 	} else if x.childTokens[0].valString == "define" {
