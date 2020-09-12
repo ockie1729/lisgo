@@ -23,6 +23,14 @@ func TestDefineVar(t *testing.T) {
 	}
 }
 
+func TestUndefinedVar(t *testing.T) {
+	_, err := EvalInner(ReadFrom(Tokenize("(+ hoge 2)")))
+
+	if err == nil {
+		t.Errorf("got %q want err", err)
+	}
+}
+
 func TestDefineFunc(t *testing.T) {
 	Eval(ReadFrom(Tokenize("(define double (lambda (x) (* x 2)))")))
 	got := Eval(ReadFrom(Tokenize("(double 4)"))).valInt

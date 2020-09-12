@@ -1,27 +1,47 @@
 package main
 
 func Eval(expression Token) Token {
-	return evalRec(expression, &GlobalEnv)
+	token, _ := EvalInner(expression) // FIXME 現在errorを握りつぶしている
+
+	return token
 }
 
-func evalRec(x Token, env *Env) Token {
+func EvalInner(expression Token) (Token, error) {
+	token, err := evalRec(expression, &GlobalEnv)
+
+	return token, err
+}
+
+func evalRec(x Token, env *Env) (Token, error) {
 	if x.tokenType == TOKEN_STRING {
-		found_env, _ := env.Find(x.valString) // FIXME 現状errorを握りつぶしている
-		return found_env.inner[x.valString]
+		found_env, err := env.Find(x.valString)
+		if err != nil {
+			return Token{}, err
+		}
+		return found_env.inner[x.valString], nil
 	} else if x.tokenType != TOKEN_CHILD_TOKENS {
-		return x
+		return x, nil
 	} else if x.childTokens[0].valString == "define" {
 		var_name := x.childTokens[1].valString
 		exp := x.childTokens[2]
-		env.inner[var_name] = evalRec(exp, env)
 
-		return Token{} // FIXME
+		token, err := evalRec(exp, env)
+		if err != nil {
+			return Token{}, err
+		}
+		env.inner[var_name] = token
+
+		return Token{}, nil // FIXME
 	} else if x.childTokens[0].valString == "if" {
 		test := x.childTokens[1]
 		conseq := x.childTokens[2]
 		alt := x.childTokens[3]
 
-		if evalRec(test, env).valBool {
+		testRes, err := evalRec(test, env)
+		if err != nil {
+			return Token{}, err
+		}
+		if testRes.valBool {
 			return evalRec(conseq, env)
 		} else {
 			return evalRec(alt, env)
@@ -34,20 +54,29 @@ func evalRec(x Token, env *Env) Token {
 		res.valFunc = func(token Token) Token {
 			newEnv := &Env{}
 			newEnv.Init(vars.childTokens, token.childTokens, env)
-			return evalRec(exp, newEnv)
+			t, _ := evalRec(exp, newEnv) // FIXME 現状はerrorを握りつぶしている
+			return t
 		}
-		return res
+		return res, nil
 	} else {
-		operatorToken := evalRec(x.childTokens[0], env)
+		operatorToken, err := evalRec(x.childTokens[0], env)
+
+		if err != nil {
+			return Token{}, err
+		}
 
 		operands := []Token{}
 		for i := 1; i < len(x.childTokens); i++ {
-			operands = append(operands, evalRec(x.childTokens[i], env))
+			op, err := evalRec(x.childTokens[i], env)
+			if err != nil {
+				return Token{}, err
+			}
+			operands = append(operands, op)
 		}
 		operandsToken := Token{}
 		operandsToken.childTokens = operands
 		operandsToken.tokenType = TOKEN_CHILD_TOKENS
 
-		return operatorToken.valFunc(operandsToken)
+		return operatorToken.valFunc(operandsToken), nil
 	}
 }
