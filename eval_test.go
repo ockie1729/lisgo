@@ -5,7 +5,8 @@ import "testing"
 func TestEvalNestedExp(t *testing.T) {
 	tokenized := Tokenize("(* (+ 4 (+ 1 1)) (/ 6 (* 1 3)))")
 	inputExp := ReadFrom(tokenized)
-	got := Eval(inputExp).valInt
+	res, _ := Eval(inputExp)
+	got := res.valInt
 	want := 12
 
 	if got != want {
@@ -15,7 +16,8 @@ func TestEvalNestedExp(t *testing.T) {
 
 func TestDefineVar(t *testing.T) {
 	Eval(ReadFrom(Tokenize("(define a 2)")))
-	got := Eval(ReadFrom(Tokenize("(* a 2)"))).valInt
+	res, _ := Eval(ReadFrom(Tokenize("(* a 2)")))
+	got := res.valInt
 	want := 4
 
 	if got != want {
@@ -24,7 +26,7 @@ func TestDefineVar(t *testing.T) {
 }
 
 func TestUndefinedVar(t *testing.T) {
-	_, err := EvalInner(ReadFrom(Tokenize("(+ hoge 2)")))
+	_, err := Eval(ReadFrom(Tokenize("(+ hoge 2)")))
 
 	if err == nil {
 		t.Errorf("got %q want err", err)
@@ -33,7 +35,8 @@ func TestUndefinedVar(t *testing.T) {
 
 func TestDefineFunc(t *testing.T) {
 	Eval(ReadFrom(Tokenize("(define double (lambda (x) (* x 2)))")))
-	got := Eval(ReadFrom(Tokenize("(double 4)"))).valInt
+	res, _ := Eval(ReadFrom(Tokenize("(double 4)")))
+	got := res.valInt
 	want := 8
 
 	if got != want {
@@ -44,7 +47,8 @@ func TestDefineFunc(t *testing.T) {
 func TestVariable(t *testing.T) {
 	Eval(ReadFrom(Tokenize("(define a 2)")))
 	Eval(ReadFrom(Tokenize("(define b 3)")))
-	got := Eval(ReadFrom(Tokenize("(+ a b)"))).valInt
+	res, _ := Eval(ReadFrom(Tokenize("(+ a b)")))
+	got := res.valInt
 	want := 5
 
 	if got != want {
@@ -53,7 +57,8 @@ func TestVariable(t *testing.T) {
 }
 
 func TestLambdaExpression(t *testing.T) {
-	got := Eval(ReadFrom(Tokenize("((lambda (x) (* x 2)) 2)"))).valInt
+	res, _ := Eval(ReadFrom(Tokenize("((lambda (x) (* x 2)) 2)")))
+	got := res.valInt
 	want := 4
 
 	if got != want {
@@ -62,7 +67,8 @@ func TestLambdaExpression(t *testing.T) {
 }
 
 func TestIfStatement(t *testing.T) {
-	got := Eval(ReadFrom(Tokenize("(if (> 4 3) (+ 2 3) (- 3 1))"))).valInt
+	res, _ := Eval(ReadFrom(Tokenize("(if (> 4 3) (+ 2 3) (- 3 1))")))
+	got := res.valInt
 	want := 5
 
 	if got != want {
@@ -71,7 +77,8 @@ func TestIfStatement(t *testing.T) {
 }
 
 func TestIfStatement2(t *testing.T) {
-	got := Eval(ReadFrom(Tokenize("(if (> 3 4) (+ 2 3) (- 3 1))"))).valInt
+	res, _ := Eval(ReadFrom(Tokenize("(if (> 3 4) (+ 2 3) (- 3 1))")))
+	got := res.valInt
 	want := 2
 
 	if got != want {

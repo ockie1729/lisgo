@@ -16,7 +16,7 @@ func Repl() {
 	fmt.Print(REPL_PROMPT_STR)
 	for stdin.Scan() {
 		exp := stdin.Text()
-		val := Eval(ReadFrom(Tokenize(exp)))
+		val, _ := Eval(ReadFrom(Tokenize(exp)))
 		fmt.Println(val.String())
 
 		fmt.Print(REPL_PROMPT_STR)

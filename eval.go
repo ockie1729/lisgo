@@ -1,12 +1,6 @@
 package main
 
-func Eval(expression Token) Token {
-	token, _ := EvalInner(expression) // FIXME 現在errorを握りつぶしている
-
-	return token
-}
-
-func EvalInner(expression Token) (Token, error) {
+func Eval(expression Token) (Token, error) {
 	token, err := evalRec(expression, &GlobalEnv)
 
 	return token, err
