@@ -99,3 +99,15 @@ func TestCd(t *testing.T) {
 
 	}
 }
+
+func TestNullQuestion(t *testing.T) {
+	res, err := Eval(ReadFrom(Tokenize("(null? (quote ()))")))
+	got := res.valBool
+	want := true
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}

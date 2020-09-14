@@ -9,6 +9,7 @@ func (env *Env) AddOperators() {
 	env.inner["="] = Token{valFunc: Equal, tokenType: TOKEN_FUNC}
 	env.inner["car"] = Token{valFunc: Car, tokenType: TOKEN_FUNC}
 	env.inner["cdr"] = Token{valFunc: Cdr, tokenType: TOKEN_FUNC}
+	env.inner["null?"] = Token{valFunc: NullQuestion, tokenType: TOKEN_FUNC}
 }
 
 func Add(operandsToken Token) Token {
@@ -70,10 +71,30 @@ func Equal(operandsToken Token) Token {
 }
 
 func Car(operandsToken Token) Token {
+	if len(operandsToken.childTokens[0].childTokens) == 0 {
+		panic("can't car '()") // FIXME エラーを返す
+	}
+
 	return operandsToken.childTokens[0].childTokens[0]
 }
 
 func Cdr(operandsToken Token) Token {
-	return Token{childTokens: operandsToken.childTokens[0].childTokens[1:],
-		tokenType: TOKEN_CHILD_TOKENS}
+	switch len(operandsToken.childTokens[0].childTokens) {
+	case 0:
+		panic("can't cdr '()") // FIXME エラーを返す
+	case 1:
+		return Token{childTokens: []Token{}, tokenType: TOKEN_CHILD_TOKENS}
+	default:
+		return Token{childTokens: operandsToken.childTokens[0].childTokens[1:],
+			tokenType: TOKEN_CHILD_TOKENS}
+	}
+}
+
+func NullQuestion(operandsToken Token) Token {
+	if operandsToken.childTokens[0].tokenType == TOKEN_CHILD_TOKENS &&
+		len(operandsToken.childTokens[0].childTokens) == 0 {
+		return Token{valBool: true, tokenType: TOKEN_BOOL}
+	} else {
+		return Token{valBool: false, tokenType: TOKEN_BOOL}
+	}
 }
