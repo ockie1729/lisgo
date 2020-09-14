@@ -52,6 +52,16 @@ func evalRec(x Token, env *Env) (Token, error) {
 			return t
 		}
 		return res, nil
+	} else if x.childTokens[0].valString == "begin" {
+		var val Token
+		for i := 1; i < len(x.childTokens); i++ {
+			var err error
+			val, err = evalRec(x.childTokens[i], env)
+			if err != nil {
+				return Token{}, err
+			}
+		}
+		return val, nil
 	} else {
 		operatorToken, err := evalRec(x.childTokens[0], env)
 

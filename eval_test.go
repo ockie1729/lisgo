@@ -76,3 +76,14 @@ func TestIfStatement(t *testing.T) {
 	}
 }
 
+func TestBeginStatement(t *testing.T) {
+	res, err := Eval(ReadFrom(Tokenize("(begin (define n 2) (= n 2))")))
+	got := res.valBool
+	want := true
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
