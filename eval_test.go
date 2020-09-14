@@ -56,16 +56,6 @@ func TestVariable(t *testing.T) {
 	}
 }
 
-func TestLambdaExpression(t *testing.T) {
-	res, _ := Eval(ReadFrom(Tokenize("((lambda (x) (* x 2)) 2)")))
-	got := res.valInt
-	want := 4
-
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
-}
-
 func TestIfStatement(t *testing.T) {
 	res, _ := Eval(ReadFrom(Tokenize("(if (> 4 3) (+ 2 3) (- 3 1))")))
 	got := res.valInt
@@ -73,6 +63,16 @@ func TestIfStatement(t *testing.T) {
 
 	if got != want {
 		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestLambdaExpression(t *testing.T) {
+	res, _ := Eval(ReadFrom(Tokenize("((lambda (x) (* x 2)) 2)")))
+	got := res.valInt
+	want := 4
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
 	}
 }
 
