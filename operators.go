@@ -7,6 +7,8 @@ func (env *Env) AddOperators() {
 	env.inner["/"] = Token{valFunc: Div, tokenType: TOKEN_FUNC}
 	env.inner[">"] = Token{valFunc: Greater, tokenType: TOKEN_FUNC}
 	env.inner["="] = Token{valFunc: Equal, tokenType: TOKEN_FUNC}
+	env.inner["car"] = Token{valFunc: Car, tokenType: TOKEN_FUNC}
+	env.inner["cdr"] = Token{valFunc: Cdr, tokenType: TOKEN_FUNC}
 }
 
 func Add(operandsToken Token) Token {
@@ -65,4 +67,13 @@ func Equal(operandsToken Token) Token {
 	b := operandsToken.childTokens[1].valInt
 
 	return Token{valBool: a == b, tokenType: TOKEN_BOOL}
+}
+
+func Car(operandsToken Token) Token {
+	return operandsToken.childTokens[0].childTokens[0]
+}
+
+func Cdr(operandsToken Token) Token {
+	return Token{childTokens: operandsToken.childTokens[0].childTokens[1:],
+		tokenType: TOKEN_CHILD_TOKENS}
 }

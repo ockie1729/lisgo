@@ -56,6 +56,19 @@ func TestVariable(t *testing.T) {
 	}
 }
 
+func TestQuoteStatement(t *testing.T) {
+	res, err := Eval(ReadFrom(Tokenize("(car (quote (1 2)))")))
+
+	got := res.valInt
+	want := 1
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
 func TestIfStatement(t *testing.T) {
 	res, _ := Eval(ReadFrom(Tokenize("(if (> 4 3) (+ 2 3) (- 3 1))")))
 	got := res.valInt

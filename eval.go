@@ -15,6 +15,9 @@ func evalRec(x Token, env *Env) (Token, error) {
 		return found_env.inner[x.valString], nil
 	} else if x.tokenType != TOKEN_CHILD_TOKENS {
 		return x, nil
+	} else if x.childTokens[0].valString == "quote" {
+		return Token{childTokens: x.childTokens[1].childTokens,
+			tokenType: TOKEN_CHILD_TOKENS}, nil
 	} else if x.childTokens[0].valString == "define" {
 		var_name := x.childTokens[1].valString
 		exp := x.childTokens[2]

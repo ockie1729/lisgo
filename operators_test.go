@@ -67,3 +67,35 @@ func TestEvalEqualInt(t *testing.T) {
 		t.Errorf("got %v want %v", got, want)
 	}
 }
+
+func TestCar(t *testing.T) {
+	res, err := Eval(ReadFrom(Tokenize("(car (quote (-1 2)))")))
+
+	got := res.valInt
+	want := -1
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func TestCd(t *testing.T) {
+	res, err := Eval(ReadFrom(Tokenize("(cdr (quote (-1 2 3)))")))
+	got := res.childTokens
+
+	resWant, _ := Eval(ReadFrom(Tokenize("(quote (2 3))")))
+	want := resWant.childTokens
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else {
+		for i := 0; i < len(want); i++ {
+			if got[i].valInt != want[i].valInt {
+				t.Errorf("got %v want %v", got[i], want[i])
+			}
+		}
+
+	}
+}
