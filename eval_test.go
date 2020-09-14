@@ -76,12 +76,3 @@ func TestIfStatement(t *testing.T) {
 	}
 }
 
-func TestIfStatement2(t *testing.T) {
-	res, _ := Eval(ReadFrom(Tokenize("(if (> 3 4) (+ 2 3) (- 3 1))")))
-	got := res.valInt
-	want := 2
-
-	if got != want {
-		t.Errorf("got %v want %v", got, want)
-	}
-}
