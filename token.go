@@ -8,7 +8,7 @@ const (
 	TOKEN_BOOL
 	TOKEN_STRING
 	TOKEN_FUNC
-	TOKEN_CHILD_TOKENS
+	TOKEN_LIST
 )
 
 type Token struct {
@@ -36,6 +36,8 @@ func (t Token) String() string {
 		return t.valString
 	case TOKEN_FUNC:
 		return "func"
+	case TOKEN_LIST:
+		return "child"
 	default:
 		panic("unknown token type ")  // FIXME エラーを返す; LIST表示
 	}

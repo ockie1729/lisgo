@@ -13,11 +13,11 @@ func evalRec(x Token, env *Env) (Token, error) {
 			return Token{}, err
 		}
 		return found_env.inner[x.valString], nil
-	} else if x.tokenType != TOKEN_CHILD_TOKENS {
+	} else if x.tokenType != TOKEN_LIST {
 		return x, nil
 	} else if x.childTokens[0].valString == "quote" {
 		return Token{childTokens: x.childTokens[1].childTokens,
-			tokenType: TOKEN_CHILD_TOKENS}, nil
+			tokenType: TOKEN_LIST}, nil
 	} else if x.childTokens[0].valString == "define" {
 		var_name := x.childTokens[1].valString
 		exp := x.childTokens[2]
@@ -82,7 +82,7 @@ func evalRec(x Token, env *Env) (Token, error) {
 		}
 		operandsToken := Token{}
 		operandsToken.childTokens = operands
-		operandsToken.tokenType = TOKEN_CHILD_TOKENS
+		operandsToken.tokenType = TOKEN_LIST
 
 		return operatorToken.valFunc(operandsToken), nil
 	}

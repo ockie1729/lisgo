@@ -44,7 +44,7 @@ func readFromRec(inputTokens []string) Token {
 
 			newToken.childTokens = append(newToken.childTokens, readFromRec(inputTokens))
 		}
-		newToken.tokenType = TOKEN_CHILD_TOKENS
+		newToken.tokenType = TOKEN_LIST
 		idxCurrentToken += 1 // pop off ")"
 		return newToken
 	} else if tokenStr == ")" {
