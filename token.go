@@ -25,5 +25,18 @@ type Token struct {
 }
 
 func (t Token) String() string {
-	return strconv.Itoa(t.valInt)
+	switch t.tokenType {
+	case TOKEN_INT:
+		return strconv.Itoa(t.valInt)
+	case TOKEN_FLOAT:
+		return strconv.FormatFloat(t.valFloat, 'f', -1, 64)
+	case TOKEN_BOOL:
+		return strconv.FormatBool(t.valBool)
+	case TOKEN_STRING:
+		return t.valString
+	case TOKEN_FUNC:
+		return "func"
+	default:
+		panic("unknown token type ")  // FIXME エラーを返す; LIST表示
+	}
 }
