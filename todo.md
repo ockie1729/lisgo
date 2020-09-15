@@ -1,9 +1,4 @@
-# LisGo
-
-## リファクタリング・修正
-* [ ] TOKEN_STRINGをTOKEN_SYNBOLにrename
-* [ ] childTokensなどをTOKEN_LIST, valListに変更
-* [ ] ASTとソースコードが対応するように修正
+# LisGoのTODOリスト
 
 ## REPL
 * [x] プロンプトが表示されている
@@ -74,3 +69,22 @@
     * [x] エラーを返す
     * [x] REPLの画面でエラーメッセージが表示される
   * [ ] その他のエラーを返す
+
+## 機能面
+* [ ] リストの各要素を2倍する関数を実行できるようにする
+(begin
+  (define nums (quote (1 2 3)))
+  (define double
+    (lambda (ls)
+	  (if (null? ls)
+	      ls
+		  (cons (* 2 (car ls))
+		        (double (cdr ls))))))
+  (double nums))
+
+## リファクタリング・修正
+* [ ] パース中にエラーがおきたとき，panicを起こさず，エラーコードを返す
+* [ ] TOKEN_STRINGをTOKEN_SYNBOLにrename
+* [ ] TOKEN_CHILD_TOKENをTOKEN_LISTにrename
+* [ ] childTokensをvalListに改名
+* [ ] ASTとソースコードが対応するように修正
