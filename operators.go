@@ -83,15 +83,15 @@ func Cdr(operandsToken Token) Token {
 	case 0:
 		panic("can't cdr '()") // FIXME エラーを返す
 	case 1:
-		return Token{childTokens: []Token{}, tokenType: TOKEN_CHILD_TOKENS}
+		return Token{childTokens: []Token{}, tokenType: TOKEN_LIST}
 	default:
 		return Token{childTokens: operandsToken.childTokens[0].childTokens[1:],
-			tokenType: TOKEN_CHILD_TOKENS}
+			tokenType: TOKEN_LIST}
 	}
 }
 
 func NullQuestion(operandsToken Token) Token {
-	if operandsToken.childTokens[0].tokenType == TOKEN_CHILD_TOKENS &&
+	if operandsToken.childTokens[0].tokenType == TOKEN_LIST &&
 		len(operandsToken.childTokens[0].childTokens) == 0 {
 		return Token{valBool: true, tokenType: TOKEN_BOOL}
 	} else {
