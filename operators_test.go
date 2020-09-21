@@ -111,3 +111,22 @@ func TestNullQuestion(t *testing.T) {
 		t.Errorf("got %v want %v", got, want)
 	}
 }
+
+func TestCons(t *testing.T) {
+	res, err := Eval(ReadFrom(Tokenize("(cons 3 (quote (2 1)))")))
+	got := res.childTokens
+
+	resWant, _ := Eval(ReadFrom(Tokenize("(quote (3 2 1))")))
+	want := resWant.childTokens
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else {
+		for i := 0; i < len(want); i++ {
+			if got[i].valInt != want[i].valInt {
+				t.Errorf("got %v want %v", got[i], want[i])
+			}
+		}
+
+	}
+}

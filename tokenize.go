@@ -30,7 +30,7 @@ func ReadFrom(inputTokens []string) Token {
 
 func readFromRec(inputTokens []string) Token {
 	if idxCurrentToken == len(inputTokens) {
-		panic("unexpected EOF while reading")
+		panic("unexpected EOF while reading") // FIXME エラーを返すように
 
 	}
 

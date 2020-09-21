@@ -39,6 +39,6 @@ func (t Token) String() string {
 	case TOKEN_LIST:
 		return "child"
 	default:
-		panic("unknown token type ")  // FIXME エラーを返す; LIST表示
+		panic("unknown token type ") // FIXME エラーを返す; LIST表示
 	}
 }

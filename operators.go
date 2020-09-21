@@ -9,6 +9,7 @@ func (env *Env) AddOperators() {
 	env.inner["="] = Token{valFunc: Equal, tokenType: TOKEN_FUNC}
 	env.inner["car"] = Token{valFunc: Car, tokenType: TOKEN_FUNC}
 	env.inner["cdr"] = Token{valFunc: Cdr, tokenType: TOKEN_FUNC}
+	env.inner["cons"] = Token{valFunc: Cons, tokenType: TOKEN_FUNC}
 	env.inner["null?"] = Token{valFunc: NullQuestion, tokenType: TOKEN_FUNC}
 }
 
@@ -97,4 +98,13 @@ func NullQuestion(operandsToken Token) Token {
 	} else {
 		return Token{valBool: false, tokenType: TOKEN_BOOL}
 	}
+}
+
+func Cons(operandsToken Token) Token {
+	car := operandsToken.childTokens[0]
+	cdr := operandsToken.childTokens[1].childTokens
+
+	cdr = append([]Token{car}, cdr...) // TODO 効率的な処理に修正
+
+	return Token{childTokens: cdr, tokenType: TOKEN_LIST}
 }
