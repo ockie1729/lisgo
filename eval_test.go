@@ -100,3 +100,15 @@ func TestBeginStatement(t *testing.T) {
 		t.Errorf("got %v want %v", got, want)
 	}
 }
+
+func TestTime(t *testing.T) {
+	res, err := Eval(ReadFrom(Tokenize("(time (+ 2 1))")))
+	got := res.valInt
+	want := 3
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}

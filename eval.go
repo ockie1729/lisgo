@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 func Eval(expression Token) (Token, error) {
 	token, err := evalRec(expression, &GlobalEnv)
 
@@ -65,6 +70,18 @@ func evalRec(x Token, env *Env) (Token, error) {
 			}
 		}
 		return val, nil
+	} else if x.childTokens[0].valString == "time" {
+		start := time.Now()
+		res, err := evalRec(x.childTokens[1], env)
+		end := time.Now()
+
+		if err != nil {
+			return Token{}, err
+		}
+
+		fmt.Printf("[time] %f(sec)\n", (end.Sub(start)).Seconds())
+
+		return res, nil
 	} else {
 		operatorToken, err := evalRec(x.childTokens[0], env)
 
