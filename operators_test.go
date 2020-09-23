@@ -57,6 +57,19 @@ func TestEvalGreater(t *testing.T) {
 	}
 }
 
+func TestEvalLessEqual(t *testing.T) {
+	inputExp := ReadFrom(Tokenize("(<= 2 2)"))
+	res, err := Eval(inputExp)
+	got := res.valBool
+	want := true
+
+	if err != nil {
+		t.Errorf("error: %v", err)
+	} else if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
 func TestEvalEqualInt(t *testing.T) {
 	inputExp := ReadFrom(Tokenize("(= 1 1)"))
 	res, _ := Eval(inputExp)

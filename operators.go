@@ -6,6 +6,7 @@ func (env *Env) AddOperators() {
 	env.inner["*"] = Token{valFunc: Mul, tokenType: TOKEN_FUNC}
 	env.inner["/"] = Token{valFunc: Div, tokenType: TOKEN_FUNC}
 	env.inner[">"] = Token{valFunc: Greater, tokenType: TOKEN_FUNC}
+	env.inner["<="] = Token{valFunc: LessEqual, tokenType: TOKEN_FUNC}
 	env.inner["="] = Token{valFunc: Equal, tokenType: TOKEN_FUNC}
 	env.inner["car"] = Token{valFunc: Car, tokenType: TOKEN_FUNC}
 	env.inner["cdr"] = Token{valFunc: Cdr, tokenType: TOKEN_FUNC}
@@ -59,6 +60,16 @@ func Greater(operandsToken Token) Token {
 
 	ans := Token{}
 	ans.valBool = a > b
+	ans.tokenType = TOKEN_BOOL
+	return ans
+}
+
+func LessEqual(operandsToken Token) Token {
+	a := operandsToken.childTokens[0].valInt
+	b := operandsToken.childTokens[1].valInt
+
+	ans := Token{}
+	ans.valBool = a <= b
 	ans.tokenType = TOKEN_BOOL
 	return ans
 }
