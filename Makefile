@@ -5,3 +5,6 @@ BINARY_NAME = lisgo
 
 build: ${GO_FILES} 
 	go build -o ${BINARY_NAME} $^
+
+run:
+	go run ${GO_FILES}
