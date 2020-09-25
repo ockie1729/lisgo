@@ -10,7 +10,7 @@
   - [x] 関数について表示される
   - [ ] リストを表示できる
 
-## S式を表すデータ構造
+## AST
 * [x] 複数のデータ型に対応している
 
 ## 式の評価
@@ -42,7 +42,7 @@
   - [ ] 大小比較演算子が使える
     - [x] > が使える
 	- [ ] < が使える
-	- [ ] <= が使える
+	- [x] <= が使える
 	- [ ] >= が使える
   - [ ] 等価演算子(=, equal?, eq?)が使える
     - [x] 整数同士の等価演算子が使える
@@ -50,7 +50,8 @@
   - [ ] リスト操作関数が使える
     - [x] car/cdrが使える
     - [ ] consが使える
-	- [ ] その他(append, list, list?)が使える
+      * デバッグ中
+    - [ ] その他(append, list, list?)が使える
   - [x] null?述語が使える
   - [ ] symbol?述語が使える
 * [ ] リストの挙動が本来のlispに近いものになる
@@ -72,6 +73,7 @@
 
 ## 機能面
 * [ ] リストの各要素を2倍する関数を実行できるようにする
+```
 (begin
   (define nums (quote (1 2 3)))
   (define double
@@ -81,10 +83,11 @@
 		  (cons (* 2 (car ls))
 		        (double (cdr ls))))))
   (double nums))
+```
 
 ## リファクタリング・修正
 * [ ] パース中にエラーがおきたとき，panicを起こさず，エラーコードを返す
 * [ ] TOKEN_STRINGをTOKEN_SYNBOLにrename
-* [ ] TOKEN_CHILD_TOKENをTOKEN_LISTにrename
+* [x] TOKEN_CHILD_TOKENをTOKEN_LISTにrename
 * [ ] childTokensをvalListに改名
 * [ ] ASTとソースコードが対応するように修正
